@@ -53,7 +53,7 @@ class App:
 
     def add_webcam(self, label):
         if 'cap' not in self.__dict__:
-            self.cap = cv2.VideoCapture(0)
+            self.cap = cv2.VideoCapture(1)
 
         self._label = label
         self.process_webcam()
@@ -72,14 +72,14 @@ class App:
 
 
     def mark_attendence(self):
-        unknown_img_path = './.tmp.jpg'
+        unknown_img_path = './.temp.jpg'
         cv2.imwrite(unknown_img_path, self.most_recent_capture_arr)
         output = str(subprocess.check_output(['face_recognition', self.db_dir, unknown_img_path]))
         print(output)
         name = output.split(',')[1].split('\\')[0].strip()
 
         if name in ['unknown_person', 'no_persons_found']:
-            util.msg_box('Ups...', 'Unknown user. Please register new user or try again.')
+            util.msg_box('oops...', 'Unknown user. Please register new user or try again.')
         else:
             # Search for the user's name in registered_users.csv
             user_id = None
@@ -104,12 +104,15 @@ class App:
                             util.msg_box('Already Marked as Present', 'You are already marked as present today.')
                             break
                     else:
-                        # If the user has not logged in today, write user ID and date into the log file
-                        util.msg_box('Marked Present !', 'Good Day, {}.'.format(name))
+                        now = datetime.datetime.now()
+                        current_time = now.strftime("%H:%M:%S")
+
+                        util.msg_box('Marked Present !', 'Good Day, {}. Time: {}.'.format(name, current_time))
                         with open(self.log_path, 'a') as f:
-                            f.write('{},{}\n'.format(user_id, date_today))
+                            f.write('{}, {}, {}\n'.format(user_id, date_today, current_time))
+
             else:
-                util.msg_box('Ups...', 'User not found in registered users. Please register as new user.')
+                util.msg_box('oops...', 'User not found in registered users. Please register as new user.')
 
         os.remove(unknown_img_path)
 
