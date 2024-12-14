@@ -6,6 +6,8 @@
   - Accurately identify and log students' attendance in real-time.
   - Seamlessly record and display attendance data on a user-friendly web application.
 
+ ![Alt text](img11.png)
+
 ### **Key Features**
 - **Real-Time Attendance:** Automatically logs attendance using advanced facial recognition.
 - **User-Friendly Interface:** Provides instructors with instant access to attendance records.
